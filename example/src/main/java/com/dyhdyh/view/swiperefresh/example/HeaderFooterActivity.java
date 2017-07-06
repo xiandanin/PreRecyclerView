@@ -8,7 +8,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +38,7 @@ public class HeaderFooterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_header);
         rv = (RecyclerView) findViewById(R.id.rv);
+
         mHeaderHelper = new RecyclerHeaderHelper(rv);
 
         mExampleAdapter = new ExampleAdapter(ExampleData.random(3), staggeredGrid);

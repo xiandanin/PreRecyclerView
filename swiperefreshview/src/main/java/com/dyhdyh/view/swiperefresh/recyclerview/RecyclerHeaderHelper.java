@@ -2,8 +2,6 @@ package com.dyhdyh.view.swiperefresh.recyclerview;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 import java.util.List;
@@ -156,15 +154,12 @@ public class RecyclerHeaderHelper implements WrapperAdapter {
 
     @Override
     public boolean isHeader(int position) {
-        int headerViewsCount = mWrapperAdapter.getHeaderViewsCount();
-        return headerViewsCount > 0 && position <= headerViewsCount - 1;
+        return mWrapperAdapter.isHeader(position);
     }
 
     @Override
     public boolean isFooter(int position) {
-        int footerViewsCount = mWrapperAdapter.getFooterViewsCount();
-        int footerPositionRange = mWrapperAdapter.getItemCount() - footerViewsCount;
-        return footerViewsCount > 0 && position >= footerPositionRange;
+        return mWrapperAdapter.isFooter(position);
     }
 
 
@@ -188,14 +183,6 @@ public class RecyclerHeaderHelper implements WrapperAdapter {
         }
         if (layout instanceof GridLayoutManager) {
             ((GridLayoutManager) layout).setSpanSizeLookup(new HeaderSpanSizeLookup(this, ((GridLayoutManager) layout).getSpanCount()));
-        } else if (layout instanceof StaggeredGridLayoutManager) {
-            int spanCount = ((StaggeredGridLayoutManager) layout).getSpanCount();
-            ExStaggeredGridLayoutManager exLayoutManager = new ExStaggeredGridLayoutManager(spanCount, ((StaggeredGridLayoutManager) layout).getOrientation());
-            exLayoutManager.setSpanSizeLookup(new HeaderSpanSizeLookup(this, spanCount));
-            exLayoutManager.setGapStrategy(((StaggeredGridLayoutManager) layout).getGapStrategy());
-            layout = exLayoutManager;
-        } else if (layout instanceof ExStaggeredGridLayoutManager) {
-            ((ExStaggeredGridLayoutManager) layout).setSpanSizeLookup(new HeaderSpanSizeLookup(this, ((ExStaggeredGridLayoutManager) layout).getSpanCount()));
         }
         return layout;
     }
@@ -207,19 +194,10 @@ public class RecyclerHeaderHelper implements WrapperAdapter {
     }
 
     private void notifyChanged(boolean animated, Runnable runnable) {
-        RecyclerView.ItemAnimator itemAnimator = mRecyclerView.getItemAnimator();
-        if (itemAnimator instanceof SimpleItemAnimator) {
-            SimpleItemAnimator simpleItemAnimator = ((SimpleItemAnimator) itemAnimator);
-            boolean supportsChangeAnimations = simpleItemAnimator.getSupportsChangeAnimations();
-            simpleItemAnimator.setSupportsChangeAnimations(animated);
+        if (animated) {
             runnable.run();
-            simpleItemAnimator.setSupportsChangeAnimations(supportsChangeAnimations);
         } else {
-            if (animated) {
-                runnable.run();
-            } else {
-                mWrapperAdapter.notifyDataSetChanged();
-            }
+            mWrapperAdapter.notifyDataSetChanged();
         }
     }
 

@@ -93,8 +93,17 @@ public class HeaderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         if (isInner(holder.getAdapterPosition())) {
             mInnerAdapter.onViewAttachedToWindow(holder);
+        } else {
+            ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
+            if (lp != null
+                    && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+                StaggeredGridLayoutManager.LayoutParams p =
+                        (StaggeredGridLayoutManager.LayoutParams) lp;
+                p.setFullSpan(true);
+            }
         }
     }
+
 
     @Override
     public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
@@ -145,9 +154,20 @@ public class HeaderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         return mInnerAdapter.getItemCount();
     }
 
-    private boolean isInner(int position) {
+    public boolean isInner(int position) {
         int headerViewsCountCount = getHeaderViewsCount();
         return position >= headerViewsCountCount && position < headerViewsCountCount + mInnerAdapter.getItemCount();
+    }
+
+    public boolean isHeader(int position) {
+        int headerViewsCount = getHeaderViewsCount();
+        return headerViewsCount > 0 && position <= headerViewsCount - 1;
+    }
+
+    public boolean isFooter(int position) {
+        int footerViewsCount = getFooterViewsCount();
+        int footerPositionRange = getItemCount() - footerViewsCount;
+        return footerViewsCount > 0 && position >= footerPositionRange;
     }
 
     private RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver() {
