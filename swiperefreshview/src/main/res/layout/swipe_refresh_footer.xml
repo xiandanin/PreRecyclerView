@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ViewStub
+        android:id="@+id/viewstub_load_footer_loading"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/load_footer_height"
+        android:layout="@layout/swipe_refresh_footer_loading" />
+
+    <ViewStub
+        android:id="@+id/viewstub_load_footer_end"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/load_footer_height"
+        android:layout="@layout/swipe_refresh_footer_end" />
+
+    <ViewStub
+        android:id="@+id/viewstub_load_footer_error"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/load_footer_height"
+        android:layout="@layout/swipe_refresh_footer_error" />
+
+</merge>

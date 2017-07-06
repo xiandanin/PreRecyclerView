@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:onClick="clickOnePage"
+        android:title="模拟只有1页的情况"></item>
+    <item
+        android:onClick="clickLoadPageData"
+        android:title="模拟分页的情况"></item>
+    <item
+        android:onClick="clickTheEndData"
+        android:title="模拟最后一页的情况"></item>
+</menu>

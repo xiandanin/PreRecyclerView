@@ -24,6 +24,10 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.Holder> 
     private boolean staggeredGrid;
     private Random colorRandom = new Random();
 
+    public ExampleAdapter(List<ExampleModel> data) {
+        this(data, false);
+    }
+
     public ExampleAdapter(List<ExampleModel> data, boolean staggeredGrid) {
         this.data = data;
         this.staggeredGrid = staggeredGrid;

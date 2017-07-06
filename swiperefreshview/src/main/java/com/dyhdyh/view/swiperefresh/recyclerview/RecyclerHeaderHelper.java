@@ -177,6 +177,10 @@ public class RecyclerHeaderHelper implements WrapperAdapter {
         return mWrapperAdapter.getInnerItemCount();
     }
 
+    public RecyclerView getRecyclerView() {
+        return mRecyclerView;
+    }
+
     private RecyclerView.LayoutManager setupLayoutManager(RecyclerView.LayoutManager layout) {
         if (mWrapperAdapter == null) {
             return layout;
@@ -200,6 +204,7 @@ public class RecyclerHeaderHelper implements WrapperAdapter {
             mWrapperAdapter.notifyDataSetChanged();
         }
     }
+
 
     /**
      * 替代RecyclerView.ViewHolder的getLayoutPosition()方法

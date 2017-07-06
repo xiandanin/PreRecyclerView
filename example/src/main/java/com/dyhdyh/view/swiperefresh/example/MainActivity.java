@@ -16,4 +16,9 @@ public class MainActivity extends AppCompatActivity {
     public void clickHeaderFooterView(View v) {
         startActivity(new Intent(this, HeaderFooterActivity.class));
     }
+    public void clickLoadMore(View v) {
+        startActivity(new Intent(this, LoadMoreActivity.class));
+    }
+
+
 }
