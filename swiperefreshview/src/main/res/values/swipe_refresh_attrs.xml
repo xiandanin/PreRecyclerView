@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SwipeRefreshView">
+        <attr name="schemeColor" format="reference"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="SwipeRefreshRecyclerView">
+        <attr name="startPage" format="integer"></attr>
+        <attr name="pageCount" format="integer"></attr>
+    </declare-styleable>
+</resources>

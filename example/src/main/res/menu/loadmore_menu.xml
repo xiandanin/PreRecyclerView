@@ -10,4 +10,7 @@
     <item
         android:onClick="clickTheEndData"
         android:title="模拟最后一页的情况"></item>
+    <item
+        android:onClick="clickErrorData"
+        android:title="模拟异常的情况"></item>
 </menu>

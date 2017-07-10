@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dyhdyh.view.swiperefresh.example.adapter.ExampleAdapter;
-import com.dyhdyh.view.swiperefresh.recyclerview.RecyclerHeaderHelper;
+import com.dyhdyh.view.swiperefresh.header.RecyclerHeaderHelper;
 
 import java.util.Random;
 

@@ -86,6 +86,31 @@ public class LoadMoreActivity extends AppCompatActivity {
     }
 
 
+    public void clickErrorData(MenuItem menuItem) {
+        mExampleAdapter = new ExampleAdapter(ExampleData.random(10));
+        mLoadMoreHelper.setAdapter(mExampleAdapter);
+        mLoadMoreHelper.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                new ExampleAsyncTask() {
+                    @Override
+                    protected void onPostExecute(List<ExampleModel> result) {
+                        try {
+                            super.onPostExecute(result);
+                            mLoadMoreHelper.setLoadMoreState(LoadMoreFooter.State.THE_END);
+                        }catch (Exception e){
+                            mLoadMoreHelper.setLoadMoreState(LoadMoreFooter.State.ERROR);
+                            e.printStackTrace();
+                        }finally {
+                            mLoadMoreHelper.setLoadMore(false);
+                        }
+                    }
+                }.execute(-1);
+            }
+        });
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.loadmore_menu, menu);

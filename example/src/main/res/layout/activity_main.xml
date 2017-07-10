@@ -17,4 +17,10 @@
         android:layout_height="wrap_content"
         android:onClick="clickLoadMore"
         android:text="LoadMore" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="clickRecyclerView"
+        android:text="SwipeRefreshRecyclerView" />
 </LinearLayout>

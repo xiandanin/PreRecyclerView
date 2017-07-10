@@ -3,7 +3,7 @@ package com.dyhdyh.view.swiperefresh.loadmore;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.dyhdyh.view.swiperefresh.recyclerview.RecyclerHeaderHelper;
+import com.dyhdyh.view.swiperefresh.header.RecyclerHeaderHelper;
 import com.dyhdyh.view.swiperefresh.view.LoadMoreView;
 
 /**
@@ -11,7 +11,7 @@ import com.dyhdyh.view.swiperefresh.view.LoadMoreView;
  * author  dengyuhan
  * created 2017/7/6 14:06
  */
-public class RecyclerLoadMoreHelper extends RecyclerHeaderHelper {
+public class RecyclerLoadMoreHelper extends RecyclerHeaderHelper implements LoadMoreWrapper{
     private final String TAG = "RecyclerLoadMoreHelper";
     private LoadMoreFooter mLoadMoreFooter;
     private boolean mLoadMoreEnabled = true;
@@ -68,6 +68,7 @@ public class RecyclerLoadMoreHelper extends RecyclerHeaderHelper {
         this.mLoadMore = loadMore;
     }
 
+    @Override
     public void setLoadMoreFooter(LoadMoreFooter loadMoreFooter) {
         this.mLoadMoreFooter = loadMoreFooter;
         setupLoadMoreFooter();

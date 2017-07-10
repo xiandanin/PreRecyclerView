@@ -1,4 +1,4 @@
-package com.dyhdyh.view.swiperefresh.recyclerview;
+package com.dyhdyh.view.swiperefresh.header;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +10,7 @@ import java.util.List;
  * author  dengyuhan
  * created 2017/7/4 14:17
  */
-public class RecyclerHeaderHelper implements WrapperAdapter {
+public class RecyclerHeaderHelper implements HeaderWrapper {
 
     private RecyclerView mRecyclerView;
     private HeaderRecyclerViewAdapter mWrapperAdapter;

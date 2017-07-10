@@ -1,4 +1,4 @@
-package com.dyhdyh.view.swiperefresh.recyclerview;
+package com.dyhdyh.view.swiperefresh.header;
 
 import android.support.v7.widget.GridLayoutManager;
 
@@ -8,10 +8,10 @@ import android.support.v7.widget.GridLayoutManager;
  */
 public class HeaderSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
 
-    private WrapperAdapter mAdapter;
+    private HeaderWrapper mAdapter;
     private int mSpanSize = 1;
 
-    public HeaderSpanSizeLookup(WrapperAdapter adapter, int spanSize) {
+    public HeaderSpanSizeLookup(HeaderWrapper adapter, int spanSize) {
         this.mAdapter = adapter;
         this.mSpanSize = spanSize;
     }

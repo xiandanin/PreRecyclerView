@@ -6,11 +6,16 @@
     android:gravity="center"
     android:orientation="horizontal">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <TextView
+        android:layout_width="@dimen/load_footer_error_icon_size"
+        android:layout_height="@dimen/load_footer_error_icon_size"
         android:layout_marginRight="@dimen/load_footer_margin_left"
-        android:background="@drawable/ic_tip"
+        android:text="!"
+        android:includeFontPadding="false"
+        android:textSize="@dimen/load_footer_error_text_size"
+        android:gravity="center"
+        android:textColor="?attr/colorAccent"
+        android:background="@drawable/swipe_refresh_border_error_icon"
         android:visibility="visible" />
 
     <TextView

@@ -2,4 +2,6 @@
 <resources>
     <dimen name="load_footer_height">60dp</dimen>
     <dimen name="load_footer_margin_left">4dp</dimen>
+    <dimen name="load_footer_error_icon_size">20dp</dimen>
+    <dimen name="load_footer_error_text_size">14dp</dimen>
 </resources>

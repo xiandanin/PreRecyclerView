@@ -1,4 +1,4 @@
-package com.dyhdyh.view.swiperefresh.recyclerview;
+package com.dyhdyh.view.swiperefresh.header;
 
 import android.view.View;
 
@@ -6,7 +6,7 @@ import android.view.View;
  * author  dengyuhan
  * created 2017/7/5 11:30
  */
-public interface WrapperAdapter {
+public interface HeaderWrapper {
 
     void addHeaderView(View header);
 

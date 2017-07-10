@@ -1,4 +1,4 @@
-package com.dyhdyh.view.swiperefresh.recyclerview;
+package com.dyhdyh.view.swiperefresh.header;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;

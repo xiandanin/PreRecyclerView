@@ -14,15 +14,23 @@ import java.util.Random;
  */
 public class ExampleAsyncTask extends AsyncTask<Integer, Void, List<ExampleModel>> {
 
-
     @Override
     protected List<ExampleModel> doInBackground(Integer... params) {
         try {
-            Thread.sleep(new Random().nextInt(2000)+1000);
+            Thread.sleep(new Random().nextInt(2000) + 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+        if (params[0] == -1) {
+            return null;
         }
         return ExampleData.random(params[0]);
     }
 
+    @Override
+    protected void onPostExecute(List<ExampleModel> exampleModels) {
+        if (exampleModels == null) {
+            throw new NullPointerException("模拟抛出异常");
+        }
+    }
 }
