@@ -77,4 +77,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.Holder> 
     public List<ExampleModel> getData() {
         return data;
     }
+
+    public void setData(List<ExampleModel> data) {
+        this.data = data;
+    }
 }

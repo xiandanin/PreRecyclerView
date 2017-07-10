@@ -36,12 +36,15 @@ public class LoadMoreActivity extends AppCompatActivity {
         mExampleAdapter = new ExampleAdapter(ExampleData.random(3));
         mLoadMoreHelper.setAdapter(mExampleAdapter);
         mLoadMoreHelper.setLayoutManager(new LinearLayoutManager(this));
+        mLoadMoreHelper.setLoadMoreState(LoadMoreFooter.State.GONE);
     }
 
 
     public void clickOnePage(MenuItem menuItem) {
-        mExampleAdapter = new ExampleAdapter(ExampleData.random(3));
-        mLoadMoreHelper.setAdapter(mExampleAdapter);
+        mExampleAdapter.setData(ExampleData.random(3));
+        mExampleAdapter.notifyDataSetChanged();
+        mLoadMoreHelper.setLoadMoreState(LoadMoreFooter.State.GONE);
+        mLoadMoreHelper.setLoadMore(false);
     }
 
     public void clickLoadPageData(MenuItem menuItem) {
@@ -57,7 +60,7 @@ public class LoadMoreActivity extends AppCompatActivity {
                         int dataSize = mExampleAdapter.getData().size();
                         mExampleAdapter.getData().addAll(result);
                         mExampleAdapter.notifyItemRangeInserted(dataSize, result.size());
-                        mLoadMoreHelper.setLoadMoreState(LoadMoreFooter.State.IDLE);
+                        mLoadMoreHelper.setLoadMore(false);
                     }
                 }.execute(10);
             }
@@ -75,6 +78,7 @@ public class LoadMoreActivity extends AppCompatActivity {
                     @Override
                     protected void onPostExecute(List<ExampleModel> result) {
                         mLoadMoreHelper.setLoadMoreState(LoadMoreFooter.State.THE_END);
+                        mLoadMoreHelper.setLoadMore(false);
                     }
                 }.execute(10);
             }

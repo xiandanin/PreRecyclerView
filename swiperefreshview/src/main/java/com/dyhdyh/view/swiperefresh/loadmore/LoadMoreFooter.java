@@ -15,8 +15,8 @@ public interface LoadMoreFooter {
     State getState();
 
     enum State {
-        /**闲置*/
-        IDLE,
+        /**隐藏*/
+        GONE,
 
         /**加载到最底了*/
         THE_END,

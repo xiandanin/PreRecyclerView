@@ -18,7 +18,7 @@ public class ExampleAsyncTask extends AsyncTask<Integer, Void, List<ExampleModel
     @Override
     protected List<ExampleModel> doInBackground(Integer... params) {
         try {
-            Thread.sleep(new Random().nextInt(3000)+1000);
+            Thread.sleep(new Random().nextInt(2000)+1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

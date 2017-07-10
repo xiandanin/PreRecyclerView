@@ -37,7 +37,7 @@ public class LoadMoreView extends RelativeLayout implements LoadMoreFooter {
 
     private void init(Context context) {
         inflate(context, R.layout.swipe_refresh_footer, this);
-        setState(State.IDLE);
+        setState(State.LOADING);
     }
 
     @Override
@@ -53,8 +53,17 @@ public class LoadMoreView extends RelativeLayout implements LoadMoreFooter {
     @Override
     public void setState(State state) {
         this.mState = state;
+        dispatchState(state);
+    }
+
+    @Override
+    public State getState() {
+        return this.mState;
+    }
+
+    protected void dispatchState(State state) {
         switch (state) {
-            case IDLE:
+            case GONE:
                 setVisibility(View.INVISIBLE);
                 break;
             case LOADING:
@@ -73,12 +82,7 @@ public class LoadMoreView extends RelativeLayout implements LoadMoreFooter {
         }
     }
 
-    @Override
-    public State getState() {
-        return this.mState;
-    }
-
-    private View setViewStateByInflate(View showView, @IdRes int inflateLayoutId, View... goneViews) {
+    protected View setViewStateByInflate(View showView, @IdRes int inflateLayoutId, View... goneViews) {
         setVisibility(View.VISIBLE);
         for (View v : goneViews) {
             if (v != null) {
