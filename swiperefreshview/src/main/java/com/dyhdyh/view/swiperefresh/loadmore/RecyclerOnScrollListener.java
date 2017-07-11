@@ -10,6 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
+import com.dyhdyh.view.swiperefresh.listener.OnRecyclerScrollChangeListener;
+
 /**
  * <p/>
  * 继承自RecyclerView.OnRecyclerScrollStateListener，可以监听到是否滑动到页面最低部

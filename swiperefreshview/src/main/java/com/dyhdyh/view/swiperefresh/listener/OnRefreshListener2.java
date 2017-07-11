@@ -1,6 +1,4 @@
-package com.dyhdyh.view.swiperefresh.view;
-
-import android.support.v4.widget.SwipeRefreshLayout;
+package com.dyhdyh.view.swiperefresh.listener;
 
 /**
  * author  dengyuhan

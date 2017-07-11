@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.dyhdyh.view.swiperefresh.example.adapter.ExampleAdapter;
 import com.dyhdyh.view.swiperefresh.example.adapter.ExampleModel;
 import com.dyhdyh.view.swiperefresh.loadmore.LoadMoreFooter;
-import com.dyhdyh.view.swiperefresh.loadmore.OnLoadMoreListener;
+import com.dyhdyh.view.swiperefresh.listener.OnLoadMoreListener;
 import com.dyhdyh.view.swiperefresh.loadmore.RecyclerLoadMoreHelper;
 
 import java.util.List;

@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.dyhdyh.view.swiperefresh.example.adapter.ExampleAdapter;
 import com.dyhdyh.view.swiperefresh.example.adapter.ExampleModel;
 import com.dyhdyh.view.swiperefresh.loadmore.LoadMoreFooter;
-import com.dyhdyh.view.swiperefresh.view.OnRefreshListener2;
+import com.dyhdyh.view.swiperefresh.listener.OnRefreshListener2;
 import com.dyhdyh.view.swiperefresh.view.SwipeRefreshRecyclerView;
 
 import java.util.List;

@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.dyhdyh.view.swiperefresh.header.RecyclerHeaderHelper;
+import com.dyhdyh.view.swiperefresh.listener.OnLoadMoreListener;
+import com.dyhdyh.view.swiperefresh.listener.OnRecyclerScrollChangeListener;
 import com.dyhdyh.view.swiperefresh.view.LoadMoreView;
 
 /**

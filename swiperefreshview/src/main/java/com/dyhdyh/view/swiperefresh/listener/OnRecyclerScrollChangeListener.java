@@ -1,4 +1,4 @@
-package com.dyhdyh.view.swiperefresh.loadmore;
+package com.dyhdyh.view.swiperefresh.listener;
 
 import android.support.v7.widget.RecyclerView;
 

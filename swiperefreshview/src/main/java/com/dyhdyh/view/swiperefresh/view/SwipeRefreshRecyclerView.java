@@ -9,9 +9,10 @@ import android.view.View;
 
 import com.dyhdyh.view.swiperefresh.R;
 import com.dyhdyh.view.swiperefresh.header.HeaderWrapper;
+import com.dyhdyh.view.swiperefresh.listener.OnRefreshListener2;
 import com.dyhdyh.view.swiperefresh.loadmore.LoadMoreFooter;
 import com.dyhdyh.view.swiperefresh.loadmore.LoadMoreWrapper;
-import com.dyhdyh.view.swiperefresh.loadmore.OnLoadMoreListener;
+import com.dyhdyh.view.swiperefresh.listener.OnLoadMoreListener;
 import com.dyhdyh.view.swiperefresh.loadmore.RecyclerLoadMoreHelper;
 import com.dyhdyh.view.swiperefresh.paging.PagingHelper;
 import com.dyhdyh.view.swiperefresh.paging.PagingWrapper;
