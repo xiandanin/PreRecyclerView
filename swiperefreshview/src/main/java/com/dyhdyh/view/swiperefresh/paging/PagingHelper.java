@@ -16,7 +16,7 @@ public class PagingHelper implements PagingWrapper {
     }
 
     public PagingHelper(int pageCount) {
-        this(DEFAULT_START_PAGE,pageCount);
+        this(DEFAULT_START_PAGE, pageCount);
     }
 
     public PagingHelper(int startPage, int pageCount) {
@@ -40,7 +40,11 @@ public class PagingHelper implements PagingWrapper {
     }
 
     @Override
-    public void addPage() {
+    public void pageDown() {
         mPage++;
+    }
+
+    public int getPageCount() {
+        return mPageCount;
     }
 }

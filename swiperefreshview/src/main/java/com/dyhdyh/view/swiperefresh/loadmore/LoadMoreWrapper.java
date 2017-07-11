@@ -7,4 +7,6 @@ package com.dyhdyh.view.swiperefresh.loadmore;
 public interface LoadMoreWrapper {
 
     void setLoadMoreFooter(LoadMoreFooter loadMoreFooter);
+
+    void setLoadMoreState(LoadMoreFooter.State state);
 }

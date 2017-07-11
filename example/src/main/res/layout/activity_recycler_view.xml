@@ -7,7 +7,6 @@
 
     <com.dyhdyh.view.swiperefresh.view.SwipeRefreshRecyclerView
         android:id="@+id/swrv"
-        app:schemeColor="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>

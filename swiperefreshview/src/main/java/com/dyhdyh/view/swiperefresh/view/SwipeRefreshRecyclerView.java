@@ -44,6 +44,7 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshView<RecyclerView> imp
     protected void applyAttributeSet(Context context, AttributeSet attrs) {
         super.applyAttributeSet(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SwipeRefreshRecyclerView);
+        mLoadMoreHelper.setLoadMoreEnabled(a.getBoolean(R.styleable.SwipeRefreshRecyclerView_loadMoreEnabled, true));
         int startPage = a.getColor(R.styleable.SwipeRefreshRecyclerView_startPage, PagingWrapper.DEFAULT_START_PAGE);
         int pageCount = a.getColor(R.styleable.SwipeRefreshRecyclerView_pageCount, PagingWrapper.DEFAULT_PAGE_COUNT);
         mPagingHelper = new PagingHelper(startPage, pageCount);
@@ -99,6 +100,11 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshView<RecyclerView> imp
         mLoadMoreHelper.setLoadMoreFooter(loadMoreFooter);
     }
 
+    @Override
+    public void setLoadMoreState(LoadMoreFooter.State state) {
+        mLoadMoreHelper.setLoadMoreState(state);
+    }
+
     public void setOnLoadMoreListener(OnLoadMoreListener listener) {
         mLoadMoreHelper.setOnLoadMoreListener(listener);
     }
@@ -139,7 +145,7 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshView<RecyclerView> imp
     }
 
     @Override
-    public void addPage() {
-        mPagingHelper.addPage();
+    public void pageDown() {
+        mPagingHelper.pageDown();
     }
 }

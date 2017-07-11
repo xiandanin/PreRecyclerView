@@ -85,6 +85,7 @@ public class RecyclerLoadMoreHelper extends RecyclerHeaderHelper implements Load
         }
     }
 
+    @Override
     public void setLoadMoreState(LoadMoreFooter.State state) {
         this.mLoadMoreFooter.setState(state);
     }

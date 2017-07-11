@@ -14,5 +14,5 @@ public interface PagingWrapper {
 
     void resetPage();
 
-    void addPage();
+    void pageDown();
 }

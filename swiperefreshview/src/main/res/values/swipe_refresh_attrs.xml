@@ -7,5 +7,6 @@
     <declare-styleable name="SwipeRefreshRecyclerView">
         <attr name="startPage" format="integer"></attr>
         <attr name="pageCount" format="integer"></attr>
+        <attr name="loadMoreEnabled" format="boolean"></attr>
     </declare-styleable>
 </resources>

@@ -10,13 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="clickHeaderFooterView"
-        android:text="HeaderView FooterView" />
+        android:text="HeaderView FooterView Helper" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="clickLoadMore"
-        android:text="LoadMore" />
+        android:text="LoadMore Helper" />
 
     <Button
         android:layout_width="match_parent"
