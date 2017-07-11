@@ -1,0 +1,32 @@
+ext {
+    android =
+            [
+                    versionCode      : 1,
+                    versionName      : "1.0.0",
+
+                    compileSdkVersion: 25,
+                    buildToolsVersion: "25.0.2",
+                    minSdkVersion    : 14,
+                    targetSdkVersion : 25,
+                    supportVersion   : "25.3.0",
+            ]
+
+    jcenter =
+            [
+                    //项目名称
+                    name       : "SwipeRefreshView",
+                    groupId    : "com.dyhdyh.widget",
+                    //项目地址
+                    siteUrl    : "https://github.com/dengyuhan/SwipeRefreshView",
+                    //项目git地址
+                    gitUrl     : "https://github.com/dengyuhan/SwipeRefreshView.git",
+                    //项目描述
+                    description: "支持HeaderView、FooterView、刷新、加载更多，高自由度的组件",
+                    //开发者的一些基本信息
+                    authorId   : "dengyuhan",
+                    authorName : "dengyuhan",
+                    authorEmail: "22309946@qq.com",
+            ]
+
+
+}
