@@ -4,6 +4,9 @@ HeaderView、FooterView、刷新、加载更多，支持自定义组装的Recycl
 ## __效果__
 ![](screenshot/screenshot.gif)
 
+## __示例apk__
+![](screenshot/example-download.png)
+
 ## __结构__
 `RecyclerHeaderHelper`  
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;可以给RecyclerView提供 增删多个HeaderView、FooterView，开关动画的能力  
