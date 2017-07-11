@@ -34,6 +34,7 @@ public abstract class SwipeRefreshView<V extends View> extends SwipeRefreshLayou
 
     protected void applyAttributeSet(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SwipeRefreshView);
+        setEnabled(a.getBoolean(R.styleable.SwipeRefreshView_refreshEnabled, true));
         int colorScheme = a.getColor(R.styleable.SwipeRefreshView_schemeColor, getDefaultColorScheme(context,attrs));
         if (colorScheme != 0) {
             setColorSchemeColors(colorScheme);

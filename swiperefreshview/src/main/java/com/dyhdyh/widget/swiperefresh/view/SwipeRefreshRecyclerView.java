@@ -60,6 +60,10 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshView<RecyclerView> imp
         mLoadMoreHelper.setAdapter(adapter);
     }
 
+    public RecyclerView.Adapter getInnerAdapter() {
+        return mLoadMoreHelper.getInnerAdapter();
+    }
+
     @Override
     public void setRefreshComplete() {
         super.setRefreshComplete();

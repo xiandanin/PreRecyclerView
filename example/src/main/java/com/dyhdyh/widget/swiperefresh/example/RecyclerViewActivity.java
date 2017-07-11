@@ -76,7 +76,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
                     int dataSize = mExampleAdapter.getData().size();
                     mExampleAdapter.getData().addAll(result);
                     mExampleAdapter.notifyItemRangeInserted(dataSize, result.size());
-                    if (rv.getPage() >= 3) {
+                    if (rv.getPage() >= 2) {
                         //如果是最后一页
                         rv.setLoadMoreState(LoadMoreFooter.State.THE_END);
                     }else{

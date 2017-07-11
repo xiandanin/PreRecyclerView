@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="SwipeRefreshView">
         <attr name="schemeColor" format="reference"></attr>
+        <attr name="refreshEnabled" format="boolean"></attr>
     </declare-styleable>
 
     <declare-styleable name="SwipeRefreshRecyclerView">

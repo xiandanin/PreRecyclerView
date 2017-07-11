@@ -2,7 +2,7 @@ ext {
     android =
             [
                     versionCode      : 1,
-                    versionName      : "1.0.0",
+                    versionName      : "1.0.1",
 
                     compileSdkVersion: 25,
                     buildToolsVersion: "25.0.2",
@@ -21,7 +21,7 @@ ext {
                     //项目git地址
                     gitUrl     : "https://github.com/dengyuhan/SwipeRefreshView.git",
                     //项目描述
-                    description: "支持HeaderView、FooterView、刷新、加载更多，高自由度的组件",
+                    description: "HeaderView、FooterView、刷新、加载更多，支持自定义组装的RecyclerView组件",
                     //开发者的一些基本信息
                     authorId   : "dengyuhan",
                     authorName : "dengyuhan",
