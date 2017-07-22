@@ -15,7 +15,7 @@ HeaderView、FooterView、刷新、加载更多，支持自定义组装的Recycl
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;继承RecyclerHeaderHelper，在它的基础上又增加了加载更多的能力
 
 `PagingHelper`  
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;拥有分页逻辑，可以获取当前页码和逻辑增长
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;拥有分页逻辑，可以获取当前页码与页码逻辑增长
 
 `SwipeRefreshRecyclerView`  
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;拥有RecyclerHeaderHelper，RecyclerLoadMoreHelper，PagingHelper的能力，一种预设的RecyclerView
