@@ -44,26 +44,30 @@ public class RecyclerLoadMoreHelper extends RecyclerHeaderHelper implements Load
             public void onScrollStateChanged(RecyclerView recyclerView, int state) {
                 //滑到底部
                 if (mLoadMoreEnabled && state == OnRecyclerScrollChangeListener.STATE_ON_BOTTOM) {
-                    LoadMoreFooter.State footerState = mLoadMoreFooter.getState();
-                    Log.d(TAG, state + "------->" + footerState);
-                    if (mLoadMore) {
-                        Log.d(TAG, "上一个请求还未执行完成");
-                    } else if (footerState == LoadMoreFooter.State.GONE) {
-                        Log.d(TAG, "隐藏");
-                    } else if (footerState == LoadMoreFooter.State.THE_END) {
-                        Log.d(TAG, "已经到底了");
-                    } else {
-                        Log.d(TAG, "正在加载");
-                        if (mOnLoadMoreListener != null) {
-                            mLoadMore = true;
-                            mLoadMoreFooter.setState(LoadMoreFooter.State.LOADING);
-                            mOnLoadMoreListener.onLoadMore();
-                        }
-                    }
+                    dispatchLoadMoreState();
                 }
             }
         });
         recyclerView.addOnScrollListener(scrollListener);
+    }
+
+
+    protected void dispatchLoadMoreState() {
+        LoadMoreFooter.State footerState = mLoadMoreFooter.getState();
+        if (mLoadMore) {
+            Log.d(TAG, "上一个请求还未执行完成");
+        } else if (footerState == LoadMoreFooter.State.GONE) {
+            Log.d(TAG, "隐藏");
+        } else if (footerState == LoadMoreFooter.State.THE_END) {
+            Log.d(TAG, "已经到底了");
+        } else {
+            Log.d(TAG, "正在加载");
+            if (mOnLoadMoreListener != null) {
+                mLoadMore = true;
+                mLoadMoreFooter.setState(LoadMoreFooter.State.LOADING);
+                mOnLoadMoreListener.onLoadMore();
+            }
+        }
     }
 
 
@@ -102,5 +106,13 @@ public class RecyclerLoadMoreHelper extends RecyclerHeaderHelper implements Load
 
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         this.mOnLoadMoreListener = onLoadMoreListener;
+    }
+
+    public LoadMoreFooter getLoadMoreFooter() {
+        return mLoadMoreFooter;
+    }
+
+    public boolean isLoadMore() {
+        return mLoadMore;
     }
 }
