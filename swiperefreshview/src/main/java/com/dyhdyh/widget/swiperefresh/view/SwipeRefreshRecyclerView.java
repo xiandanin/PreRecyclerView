@@ -101,6 +101,11 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshView<RecyclerView> imp
     }
 
     @Override
+    public void setLoadMoreEnabled(boolean loadMoreEnabled) {
+        mLoadMoreHelper.setLoadMoreEnabled(loadMoreEnabled);
+    }
+
+    @Override
     public void setLoadMoreFooter(LoadMoreFooter loadMoreFooter) {
         mLoadMoreHelper.setLoadMoreFooter(loadMoreFooter);
     }
@@ -108,6 +113,14 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshView<RecyclerView> imp
     @Override
     public void setLoadMoreState(LoadMoreFooter.State state) {
         mLoadMoreHelper.setLoadMoreState(state);
+    }
+
+    public RecyclerLoadMoreHelper getLoadMoreHelper() {
+        return mLoadMoreHelper;
+    }
+
+    public PagingHelper getPagingHelper() {
+        return mPagingHelper;
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener listener) {
