@@ -22,6 +22,7 @@ public class PagingHelper implements PagingWrapper {
     public PagingHelper(int startPage, int pageCount) {
         this.mStartPage = startPage;
         this.mPageCount = pageCount;
+        this.mPage = this.mStartPage;
     }
 
     @Override

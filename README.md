@@ -25,7 +25,7 @@ HeaderView、FooterView、刷新、加载更多，支持自定义组装的Recycl
 ## __SwipeRefreshRecyclerView__
 ####  Gradle
 ```
-compile 'com.dyhdyh.widget:swiperefreshview:1.0.1'
+compile 'com.dyhdyh.widget:swiperefreshview:1.0.3.1'
 ```
 
 #### 默认配置

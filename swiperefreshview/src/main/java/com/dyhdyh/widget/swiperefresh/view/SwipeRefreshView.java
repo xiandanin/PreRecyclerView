@@ -27,8 +27,8 @@ public abstract class SwipeRefreshView<V extends View> extends SwipeRefreshLayou
     }
 
     protected void initView(Context context, AttributeSet attrs) {
-        V childView = inflateChildView(context, attrs);
-        addView(childView);
+        mView = inflateChildView(context, attrs);
+        addView(mView);
         applyAttributeSet(context, attrs);
     }
 
