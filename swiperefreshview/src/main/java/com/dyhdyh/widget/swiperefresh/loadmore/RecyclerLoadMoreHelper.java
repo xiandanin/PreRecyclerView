@@ -53,7 +53,7 @@ public class RecyclerLoadMoreHelper extends RecyclerHeaderHelper implements Load
 
 
     protected void dispatchLoadMoreState() {
-        LoadMoreFooter.State footerState = mLoadMoreFooter.getState();
+        LoadMoreFooter.State footerState = getLoadMoreState();
         if (mLoadMore) {
             Log.d(TAG, "上一个请求还未执行完成");
         } else if (footerState == LoadMoreFooter.State.GONE) {
@@ -81,7 +81,7 @@ public class RecyclerLoadMoreHelper extends RecyclerHeaderHelper implements Load
         setupLoadMoreFooter();
     }
 
-    private void setupLoadMoreFooter() {
+    protected void setupLoadMoreFooter() {
         if (getWrapperAdapter() != null) {
             if (mLoadMoreEnabled) {
                 mLoadMoreFooter.setState(LoadMoreFooter.State.LOADING);
@@ -95,6 +95,10 @@ public class RecyclerLoadMoreHelper extends RecyclerHeaderHelper implements Load
     @Override
     public void setLoadMoreState(LoadMoreFooter.State state) {
         this.mLoadMoreFooter.setState(state);
+    }
+
+    public LoadMoreFooter.State getLoadMoreState() {
+        return this.mLoadMoreFooter.getState();
     }
 
     @Override
