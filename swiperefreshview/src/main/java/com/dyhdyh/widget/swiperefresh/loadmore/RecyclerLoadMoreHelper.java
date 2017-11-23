@@ -64,7 +64,7 @@ public class RecyclerLoadMoreHelper extends RecyclerHeaderHelper implements Load
             Log.d(TAG, "正在加载");
             if (mOnLoadMoreListener != null) {
                 mLoadMore = true;
-                mLoadMoreFooter.setState(LoadMoreFooter.State.LOADING);
+                setLoadMoreState(LoadMoreFooter.State.LOADING);
                 mOnLoadMoreListener.onLoadMore();
             }
         }

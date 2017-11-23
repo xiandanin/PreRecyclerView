@@ -185,6 +185,12 @@ public class HeaderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         }
 
         @Override
+        public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
+            super.onItemRangeChanged(positionStart, itemCount, payload);
+            notifyItemRangeChanged(positionStart + getHeaderViewsCount(), itemCount, payload);
+        }
+
+        @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
             super.onItemRangeInserted(positionStart, itemCount);
             notifyItemRangeInserted(positionStart + getHeaderViewsCount(), itemCount);
