@@ -55,6 +55,19 @@ public class HeaderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
+        int headerViewsCountCount = getHeaderViewsCount();
+        if (position >= headerViewsCountCount && position < headerViewsCountCount + mInnerAdapter.getItemCount()) {
+            mInnerAdapter.onBindViewHolder(holder, position - headerViewsCountCount, payloads);
+        } else {
+            ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
+            if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
+                ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
+            }
+        }
+    }
+
+    @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int headerViewsCountCount = getHeaderViewsCount();
         if (position >= headerViewsCountCount && position < headerViewsCountCount + mInnerAdapter.getItemCount()) {
@@ -186,7 +199,6 @@ public class HeaderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
-            super.onItemRangeChanged(positionStart, itemCount, payload);
             notifyItemRangeChanged(positionStart + getHeaderViewsCount(), itemCount, payload);
         }
 
