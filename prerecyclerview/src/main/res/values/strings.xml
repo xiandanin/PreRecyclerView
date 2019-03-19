@@ -1,0 +1,5 @@
+<resources>
+    <string name="pre_label_footer_loading">loading...</string>
+    <string name="pre_label_footer_error">pull up retry</string>
+    <string name="pre_label_footer_end">no more to be loaded</string>
+</resources>
