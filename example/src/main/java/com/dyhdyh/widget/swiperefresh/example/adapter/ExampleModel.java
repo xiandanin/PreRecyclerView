@@ -7,13 +7,15 @@ package com.dyhdyh.widget.swiperefresh.example.adapter;
 public class ExampleModel {
     private String title;
     private String image;
+    private int color;
 
     public ExampleModel() {
     }
 
-    public ExampleModel(String title, String image) {
+    public ExampleModel(String title, String image, int color) {
         this.title = title;
         this.image = image;
+        this.color = color;
     }
 
     public String getTitle() {
@@ -30,5 +32,13 @@ public class ExampleModel {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

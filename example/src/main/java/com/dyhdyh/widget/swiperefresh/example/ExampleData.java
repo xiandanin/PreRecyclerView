@@ -1,6 +1,8 @@
 package com.dyhdyh.widget.swiperefresh.example;
 
 
+import android.graphics.Color;
+
 import com.dyhdyh.widget.swiperefresh.example.adapter.ExampleModel;
 
 import java.util.ArrayList;
@@ -13,6 +15,13 @@ import java.util.Random;
  */
 public class ExampleData {
 
+    public static int randomColor() {
+        int r = new Random().nextInt(95) + 160;
+        int g = new Random().nextInt(95) + 160;
+        int b = new Random().nextInt(95) + 160;
+        return Color.rgb(r, g, b);
+    }
+
     public static List<ExampleModel> random(int count) {
         List<ExampleModel> models = new ArrayList<>();
         for (int i = 0; i < count; i++) {
@@ -20,6 +29,7 @@ public class ExampleData {
             ExampleModel model = new ExampleModel();
             model.setTitle("Item " + i);
             model.setImage(IMAGES[random.nextInt(IMAGES.length)]);
+            model.setColor(randomColor());
             models.add(model);
         }
         return models;

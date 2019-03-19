@@ -2,7 +2,6 @@ package com.dyhdyh.view.prerecyclerview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
@@ -65,11 +64,11 @@ public class SimpleLoadMoreView extends RelativeLayout implements LoadMoreFooter
             } else if (LoadMoreFooter.STATE_THE_END == state) {
                 mProgressBar.setVisibility(View.GONE);
                 mSymbolView.setVisibility(View.GONE);
-                mLabelTextView.setText(R.string.pre_label_footer_error);
+                mLabelTextView.setText(R.string.pre_label_footer_end);
             } else if (LoadMoreFooter.STATE_ERROR == state) {
                 mProgressBar.setVisibility(View.GONE);
                 mSymbolView.setVisibility(View.VISIBLE);
-                mLabelTextView.setText(R.string.pre_label_footer_end);
+                mLabelTextView.setText(R.string.pre_label_footer_error);
             }
         }
     }

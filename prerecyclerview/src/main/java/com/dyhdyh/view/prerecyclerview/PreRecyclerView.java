@@ -1,6 +1,8 @@
 package com.dyhdyh.view.prerecyclerview;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
+import android.view.View;
 
 import java.lang.reflect.Method;
 
@@ -16,78 +19,169 @@ import java.lang.reflect.Method;
  * created 2019/3/19 14:20
  */
 public class PreRecyclerView extends RecyclerView {
+    private final int DEFAULT_AUTOLOAD_LASTCOUNT = 1;
+
     private PreWrapperAdapter mWrapperAdapter;
-    private LoadMoreFooter mFooter;
+    private View mHeaderView;
+    private LoadMoreFooter mFooterView;
+    private OnLoadMoreListener mOnLoadMoreListener;
 
     //是否开启加载更多
-    private boolean mLoadMoreEnabled;
+    private boolean mLoadMoreEnabled = true;
 
     //加载更多是否完成
     private boolean mLoadMoreCompleted = true;
 
-    //显示到倒数第mAutoLoadByLastCount条才开始自动加载
-    private int mAutoLoadByLastCount = 1;
+    //是否已经到底
+    private boolean mLoadMoreEnd;
 
-    private OnLoadMoreListener mOnLoadMoreListener;
+    //显示到倒数第mAutoLoadByLastCount条才开始自动加载
+    private int mAutoLoadByLastCount = DEFAULT_AUTOLOAD_LASTCOUNT;
+
 
     public PreRecyclerView(@NonNull Context context) {
-        super(context);
+        this(context, null);
     }
 
     public PreRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public PreRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        //context.obtainStyledAttributes(attrs,R.styleable.)
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PreRecyclerView);
+        mLoadMoreEnabled = a.getBoolean(R.styleable.PreRecyclerView_loadMoreEnabled, true);
+        mAutoLoadByLastCount = a.getInt(R.styleable.PreRecyclerView_autoLoadByLastCount, DEFAULT_AUTOLOAD_LASTCOUNT);
+        a.recycle();
+
+        mFooterView = new SimpleLoadMoreView(context, attrs, defStyle);
     }
 
     @Override
     public void setLayoutManager(@Nullable LayoutManager layout) {
-        super.setLayoutManager(layout);
         if (layout instanceof GridLayoutManager) {
             final GridLayoutManager gridManager = ((GridLayoutManager) layout);
-            final GridLayoutManager.SpanSizeLookup oldSizeLookup = gridManager.getSpanSizeLookup();
-            gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            gridManager.setSpanSizeLookup(new PreSpanSizeLookup(gridManager) {
+
                 @Override
-                public int getSpanSize(int position) {
-                    if (mWrapperAdapter != null && mWrapperAdapter.isInner(position)) {
-                        return 1;
-                    } else {
-                        if (oldSizeLookup == null) {
-                            return gridManager.getSpanCount();
-                        } else {
-                            return oldSizeLookup.getSpanSize(position);
-                        }
-                    }
+                public boolean isHeaderOrFooter(int position) {
+                    return mWrapperAdapter != null && (mWrapperAdapter.isHeader(position) || mWrapperAdapter.isFooter(position));
                 }
             });
         }
+        super.setLayoutManager(layout);
+    }
+
+    @Override
+    public void setAdapter(@Nullable Adapter adapter) {
+        if (adapter == null) {
+            super.setAdapter(null);
+        } else {
+            mWrapperAdapter = new PreWrapperAdapter(adapter, new PreViewCallback() {
+                @Override
+                public View getHeaderView() {
+                    return mHeaderView;
+                }
+
+                @Override
+                public View getFooterView() {
+                    return mFooterView == null ? null : mFooterView.getView();
+                }
+
+                @Override
+                public int getHeaderCount() {
+                    return mHeaderView == null ? 0 : 1;
+                }
+
+                @Override
+                public int getFooterCount() {
+                    return mLoadMoreEnabled && mFooterView != null ? 1 : 0;
+                }
+
+                @Override
+                public boolean isLoadMoreEnabled() {
+                    return mLoadMoreEnabled;
+                }
+            });
+            adapter.registerAdapterDataObserver(new PreInnerDataObserver(mWrapperAdapter));
+            super.setAdapter(mWrapperAdapter);
+        }
+    }
+
+    @Nullable
+    public Adapter getInnerAdapter() {
+        return mWrapperAdapter == null ? null : mWrapperAdapter.getInnerAdapter();
     }
 
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
-        //判断是否需要加载更多
-        if (mLoadMoreEnabled && mOnLoadMoreListener != null) {
+        //如果加载更多是开启的/处于空闲状态/数据没有到底/也有监听 就检查是否可以加载更多
+        if (mLoadMoreEnabled && mLoadMoreCompleted && !mLoadMoreEnd && mOnLoadMoreListener != null) {
             LayoutManager lm = super.getLayoutManager();
             if (lm != null && state == RecyclerView.SCROLL_STATE_IDLE) {
                 int lastVisibleItemPosition = findLastVisibleItemPosition(lm);
                 int itemCount = lm.getItemCount();
 
                 //如果最后显示的位置符合 加载更多也处于空闲 就回调加载更多
-                if (itemCount > 0 && lastVisibleItemPosition >= itemCount - mAutoLoadByLastCount && mLoadMoreCompleted) {
-                    mLoadMoreCompleted = false;
-                    if (mFooter != null) {
-                        mFooter.setState(LoadMoreFooter.STATE_LOADING);
-                    }
-                    mOnLoadMoreListener.onLoadMore();
+                if (itemCount > 0 && lastVisibleItemPosition >= itemCount - mAutoLoadByLastCount) {
+                    this.mLoadMoreCompleted = false;
+                    this.setLoadMoreState(LoadMoreFooter.STATE_LOADING);
+                    this.mOnLoadMoreListener.onLoadMore();
                 }
             }
         }
     }
 
+    public void setHeaderView(View headerView) {
+        this.mHeaderView = headerView;
+        if (mWrapperAdapter != null) {
+            mWrapperAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void removeHeaderView() {
+        this.mHeaderView = null;
+        if (mWrapperAdapter != null) {
+            mWrapperAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void setLoadMoreView(LoadMoreFooter footerView) {
+        this.mFooterView = footerView;
+        if (mWrapperAdapter != null) {
+            mWrapperAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void setAutoLoadByLastCount(int autoLoadByLastCount) {
+        this.mAutoLoadByLastCount = autoLoadByLastCount;
+    }
+
+    public void setLoadMoreCompleted() {
+        this.mLoadMoreCompleted = true;
+    }
+
+    public boolean isLoadMoreCompleted() {
+        return mLoadMoreCompleted;
+    }
+
+    public void setLoadMoreEnabled(boolean enabled) {
+        this.mLoadMoreEnabled = enabled;
+    }
+
+    public void setLoadMoreState(@IntRange(from = LoadMoreFooter.STATE_NORMAL, to = LoadMoreFooter.STATE_THE_END) int state) {
+        if (mFooterView != null) {
+            mFooterView.setState(state);
+        }
+        if (LoadMoreFooter.STATE_THE_END == state) {
+            mLoadMoreEnd = true;
+        }
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener listener) {
+        this.mOnLoadMoreListener = listener;
+    }
 
     /**
      * 查找最后一个显示的位置
@@ -113,5 +207,6 @@ public class PreRecyclerView extends RecyclerView {
             return 0;
         }
     }
+
 
 }

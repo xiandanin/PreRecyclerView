@@ -1,7 +1,6 @@
 package com.dyhdyh.view.prerecyclerview;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.ViewGroup;
@@ -14,15 +13,16 @@ import java.util.List;
  */
 public class PreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private PreView mPreView;
+    private PreViewCallback mPreView;
 
     private final RecyclerView.Adapter mInnerAdapter;
 
     private final int VIEW_TYPE_HEADER = Integer.MIN_VALUE / 2;
     private final int VIEW_TYPE_FOOTER = VIEW_TYPE_HEADER - 1;
 
-    public PreWrapperAdapter(@NonNull RecyclerView.Adapter adapter) {
+    public PreWrapperAdapter(@NonNull RecyclerView.Adapter adapter, @NonNull PreViewCallback preView) {
         this.mInnerAdapter = adapter;
+        this.mPreView = preView;
     }
 
     @NonNull
@@ -58,14 +58,14 @@ public class PreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List<Object> payloads) {
         if (isInner(position)) {
-            mInnerAdapter.onBindViewHolder(holder, position, payloads);
+            mInnerAdapter.onBindViewHolder(holder, getInnerPosition(position), payloads);
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (isInner(position)) {
-            mInnerAdapter.onBindViewHolder(holder, position);
+            mInnerAdapter.onBindViewHolder(holder, getInnerPosition(position));
         }
     }
 
@@ -198,13 +198,4 @@ public class PreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    @Override
-    public void registerAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
-        mInnerAdapter.registerAdapterDataObserver(observer);
-    }
-
-    @Override
-    public void unregisterAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
-        mInnerAdapter.unregisterAdapterDataObserver(observer);
-    }
 }

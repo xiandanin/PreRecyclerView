@@ -1,6 +1,5 @@
 package com.dyhdyh.widget.swiperefresh.example.adapter;
 
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.dyhdyh.widget.swiperefresh.example.R;
 
 import java.util.List;
@@ -48,10 +46,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.Holder> 
         } else {
             holder.iv.getLayoutParams().height = holder.itemView.getResources().getDimensionPixelSize(R.dimen.image_height);
         }
-        Glide.with(holder.itemView.getContext())
-                .load(model.getImage())
-                .placeholder(new ColorDrawable(Color.rgb(colorRandom.nextInt(255), colorRandom.nextInt(255), colorRandom.nextInt(255))))
-                .into(holder.iv);
+        holder.iv.setImageDrawable(new ColorDrawable(model.getColor()));
     }
 
     @Override
