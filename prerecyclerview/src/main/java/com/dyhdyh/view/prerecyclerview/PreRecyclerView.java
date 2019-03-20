@@ -9,22 +9,25 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 /**
  * @author dengyuhan
  * created 2019/3/19 14:20
  */
-public class PreRecyclerView extends RecyclerView {
+public class PreRecyclerView extends RecyclerView implements OnItemCountChangedListener {
     private final int DEFAULT_AUTOLOAD_LASTCOUNT = 1;
 
     private PreWrapperAdapter mWrapperAdapter;
     private View mHeaderView;
     private LoadMoreFooter mFooterView;
     private OnLoadMoreListener mOnLoadMoreListener;
+    private OnItemCountChangedListener mOnItemCountChangedListener;
 
     //是否开启加载更多
     private boolean mLoadMoreEnabled = true;
@@ -38,6 +41,32 @@ public class PreRecyclerView extends RecyclerView {
     //显示到倒数第mAutoLoadByLastCount条才开始自动加载
     private int mAutoLoadByLastCount = DEFAULT_AUTOLOAD_LASTCOUNT;
 
+    private PreViewCallback mPreViewCallback = new PreViewCallback() {
+        @Override
+        public View getHeaderView() {
+            return mHeaderView;
+        }
+
+        @Override
+        public View getFooterView() {
+            return mFooterView == null ? null : mFooterView.getView();
+        }
+
+        @Override
+        public int getHeaderCount() {
+            return mHeaderView == null ? 0 : 1;
+        }
+
+        @Override
+        public int getFooterCount() {
+            return mLoadMoreEnabled && mFooterView != null ? 1 : 0;
+        }
+
+        @Override
+        public boolean isLoadMoreEnabled() {
+            return mLoadMoreEnabled;
+        }
+    };
 
     public PreRecyclerView(@NonNull Context context) {
         this(context, null);
@@ -52,9 +81,23 @@ public class PreRecyclerView extends RecyclerView {
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PreRecyclerView);
         mLoadMoreEnabled = a.getBoolean(R.styleable.PreRecyclerView_loadMoreEnabled, true);
         mAutoLoadByLastCount = a.getInt(R.styleable.PreRecyclerView_autoLoadByLastCount, DEFAULT_AUTOLOAD_LASTCOUNT);
+        String footerClassString = a.getString(R.styleable.PreRecyclerView_loadMoreFooter);
         a.recycle();
 
-        mFooterView = new SimpleLoadMoreView(context, attrs, defStyle);
+        try {
+            if (!TextUtils.isEmpty(footerClassString)) {
+                final Class<?> footerClass = Class.forName(footerClassString);
+                if (LoadMoreFooter.class.isAssignableFrom(footerClass)) {
+                    Constructor con = footerClass.getConstructor(Context.class);
+                    mFooterView = (LoadMoreFooter) con.newInstance(context);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (mFooterView == null) {
+            mFooterView = new SimpleLoadMoreView(context, attrs, defStyle);
+        }
     }
 
     @Override
@@ -77,33 +120,10 @@ public class PreRecyclerView extends RecyclerView {
         if (adapter == null) {
             super.setAdapter(null);
         } else {
-            mWrapperAdapter = new PreWrapperAdapter(adapter, new PreViewCallback() {
-                @Override
-                public View getHeaderView() {
-                    return mHeaderView;
-                }
-
-                @Override
-                public View getFooterView() {
-                    return mFooterView == null ? null : mFooterView.getView();
-                }
-
-                @Override
-                public int getHeaderCount() {
-                    return mHeaderView == null ? 0 : 1;
-                }
-
-                @Override
-                public int getFooterCount() {
-                    return mLoadMoreEnabled && mFooterView != null ? 1 : 0;
-                }
-
-                @Override
-                public boolean isLoadMoreEnabled() {
-                    return mLoadMoreEnabled;
-                }
-            });
-            adapter.registerAdapterDataObserver(new PreInnerDataObserver(mWrapperAdapter));
+            mWrapperAdapter = new PreWrapperAdapter(adapter, mPreViewCallback);
+            final PreInnerDataObserver observer = new PreInnerDataObserver(mWrapperAdapter);
+            observer.setOnItemCountChangedListener(this);
+            adapter.registerAdapterDataObserver(observer);
             super.setAdapter(mWrapperAdapter);
         }
     }
@@ -124,7 +144,8 @@ public class PreRecyclerView extends RecyclerView {
                 int itemCount = lm.getItemCount();
 
                 //如果最后显示的位置符合 加载更多也处于空闲 就回调加载更多
-                if (itemCount > 0 && lastVisibleItemPosition >= itemCount - mAutoLoadByLastCount) {
+                final int footerCount = mPreViewCallback.getFooterCount();
+                if (itemCount > 0 && lastVisibleItemPosition >= itemCount - footerCount - mAutoLoadByLastCount) {
                     this.mLoadMoreCompleted = false;
                     this.setLoadMoreState(LoadMoreFooter.STATE_LOADING);
                     this.mOnLoadMoreListener.onLoadMore();
@@ -133,9 +154,18 @@ public class PreRecyclerView extends RecyclerView {
         }
     }
 
+
+    @Override
+    public void onItemCountChanged(int itemCount) {
+        if (mOnItemCountChangedListener != null) {
+            mOnItemCountChangedListener.onItemCountChanged(itemCount);
+        }
+    }
+
     public void setHeaderView(View headerView) {
         this.mHeaderView = headerView;
         if (mWrapperAdapter != null) {
+            mWrapperAdapter.refreshHeaderType();
             mWrapperAdapter.notifyDataSetChanged();
         }
     }
@@ -147,9 +177,10 @@ public class PreRecyclerView extends RecyclerView {
         }
     }
 
-    public void setLoadMoreView(LoadMoreFooter footerView) {
+    public void setLoadMoreFooter(LoadMoreFooter footerView) {
         this.mFooterView = footerView;
         if (mWrapperAdapter != null) {
+            mWrapperAdapter.refreshFooterType();
             mWrapperAdapter.notifyDataSetChanged();
         }
     }
@@ -166,10 +197,6 @@ public class PreRecyclerView extends RecyclerView {
         return mLoadMoreCompleted;
     }
 
-    public void setLoadMoreEnabled(boolean enabled) {
-        this.mLoadMoreEnabled = enabled;
-    }
-
     public void setLoadMoreState(@IntRange(from = LoadMoreFooter.STATE_NORMAL, to = LoadMoreFooter.STATE_THE_END) int state) {
         if (mFooterView != null) {
             mFooterView.setState(state);
@@ -179,8 +206,26 @@ public class PreRecyclerView extends RecyclerView {
         }
     }
 
+
+    public void reset() {
+        setLoadMoreState(LoadMoreFooter.STATE_NORMAL);
+        mLoadMoreCompleted = true;
+        mLoadMoreEnd = false;
+    }
+
+    public int getLoadMoreState() {
+        if (mFooterView != null) {
+            return mFooterView.getState();
+        }
+        return LoadMoreFooter.STATE_NORMAL;
+    }
+
     public void setOnLoadMoreListener(OnLoadMoreListener listener) {
         this.mOnLoadMoreListener = listener;
+    }
+
+    public void setOnItemCountChangedListener(OnItemCountChangedListener listener) {
+        this.mOnItemCountChangedListener = listener;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.dyhdyh.widget.swiperefresh.example.adapter;
+package com.dyhdyh.view.prerecyclerview.example.adapter;
 
 /**
  * author  dengyuhan

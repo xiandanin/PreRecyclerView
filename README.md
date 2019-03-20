@@ -1,87 +1,96 @@
-# SwipeRefreshView
-HeaderView、FooterView、刷新、加载更多，支持自定义组装的RecyclerView组件
-
-## __效果__
-![](screenshot/screenshot.gif)
-
-## __示例apk__
-![](screenshot/example-download.png)
-
-## __结构__
-`RecyclerHeaderHelper`  
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;可以给RecyclerView提供 增删多个HeaderView、FooterView，开关动画的能力  
-		
-`RecyclerLoadMoreHelper`  
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;继承RecyclerHeaderHelper，在它的基础上又增加了加载更多的能力
-
-`PagingHelper`  
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;拥有分页逻辑，可以获取当前页码与页码逻辑增长
-
-`SwipeRefreshRecyclerView`  
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;拥有RecyclerHeaderHelper，RecyclerLoadMoreHelper，PagingHelper的能力，一种预设的RecyclerView
-
-###### 这里只介绍`SwipeRefreshRecyclerView`的用法，更多可以看例子
-
-## __SwipeRefreshRecyclerView__
-####  Gradle
+### Gradle
 ```
-compile 'com.dyhdyh.widget:swiperefreshview:1.0.3.1'
+implementation 'com.dyhdyh.view:prerecyclerview:1.0.0'
 ```
 
-#### 默认配置
+### XML
 ```
-<com.dyhdyh.widget.swiperefresh.view.SwipeRefreshRecyclerView
-        android:id="@+id/swipe"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:refreshEnabled="true"
-        app:loadMoreEnabled="true"
-        app:pageCount="10"
-        app:schemeColor="@color/colorAccent"
-        app:startPage="0" />
-```
-#### 获取实际RecyclerView对象
-```
-rv.getView()
+<com.dyhdyh.view.prerecyclerview.PreRecyclerView
+    android:id="@+id/recyclerview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
 ```
 
-#### 获取实际Adapter对象
+### 自定义属性
 ```
-rv.getInnerAdapter()
+<!--显示到倒数第几个 才回调加载更多 默认1-->
+<attr name="autoLoadByLastCount" format="integer" />
+<!--是否开启加载更多 默认true-->
+<attr name="loadMoreEnabled" format="boolean" />
+<!--加载更多的View 完整类名-->
+<attr name="loadMoreFooter" format="string" />
 ```
 
-
-#### 监听
+### 设置Header
 ```
-//rv.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener());
-//rv.setOnLoadMoreListener(new OnLoadMoreListener());
-rv.setOnRefreshListener(new OnRefreshListener2() {
+//设置Header View
+recyclerview.setHeaderView(headerView);
+//移除Header View
+recyclerview.removeHeaderView();
+//这是LoadMoreView
+recyclerview.setLoadMoreFooter(footerView);
+```
+如果要设置HeaderView或者LoadMoreView，将设置View放在第一步是最省性能的
+
+`setHeaderView` -> `setLayoutManager` -> `setAdapter`
+
+`setLoadMoreView` -> `setLayoutManager` -> `setAdapter`
+
+##### 自定义LoadMoreView
+参考`SimpleLoadMoreView`实现`LoadMoreFooter`
+
+
+### 设置LoadMore状态
+```
+//STATE_NORMAL = 正常
+//STATE_LOADING = 加载中
+//STATE_ERROR = 异常
+//STATE_THE_END = 到底了
+recyclerview.setLoadMoreState(LoadMoreFooter.STATE_LOADING);
+```
+
+### 设置回调
+```
+recyclerview.setOnLoadMoreListener(new OnLoadMoreListener() {
     @Override
-    public void onRefresh(boolean refresh) {
-        if (refresh) {
-            //刷新
-        } else {
-            //加载更多
-        }
+    public void onLoadMore() {
+        Log.d("---------->", "加载下一页--->");
+    }
+});
+recyclerview.setOnItemCountChangedListener(new OnItemCountChangedListener() {
+    @Override
+    public void onItemCountChanged(int innerItemCount) {
+        Log.d("---------->", "数据长度发生变化--->" + itemCount);
     }
 });
 ```
-#### 设置自定义加载更多样式
+
+
+### 结合实际情况
+如果是刷新，需要在加载数据之前调用`reset()`来重置状态
+
 ```
-//参考LoadMoreView
-rv.setLoadMoreFooter(loadMoreFooter);
-```
-#### 加载更多状态
-```
-rv.setLoadMoreState(LoadMoreFooter.State.GONE);
-rv.setLoadMoreState(LoadMoreFooter.State.LOADING);
-rv.setLoadMoreState(LoadMoreFooter.State.THE_END);
-rv.setLoadMoreState(LoadMoreFooter.State.ERROR);
+refresh_Layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+    @Override
+    public void onRefresh() {
+        //重置recyclerview
+        recyclerview.reset();
+        
+        asyncRefreshPageData();
+    }
+});
 ```
 
-#### 刷新完成
-```
-rv.setRefreshComplete();
-```
+如果是加载更多，需要在完成的时候调用`setLoadMoreCompleted()`，并设置合适的状态
 
-###### 可以参考例子`RecyclerViewActivity`
+```
+new ExampleAsyncTask() {
+    @Override
+    protected void onPostExecute(List<ExampleModel> result) {
+        //加载完成
+        rv.setLoadMoreCompleted();
+        
+        rv.setLoadMoreState(state);
+    }
+}.execute(10);
+```

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="PreRecyclerView">
+        <!--显示到倒数第几个 才回调加载更多-->
         <attr name="autoLoadByLastCount" format="integer" />
+        <!--是否开启加载更多-->
         <attr name="loadMoreEnabled" format="boolean" />
+        <!--加载更多的View 完整类名-->
+        <attr name="loadMoreFooter" format="string" />
     </declare-styleable>
 </resources>

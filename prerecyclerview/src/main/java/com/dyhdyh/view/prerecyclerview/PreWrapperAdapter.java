@@ -17,12 +17,27 @@ public class PreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private final RecyclerView.Adapter mInnerAdapter;
 
-    private final int VIEW_TYPE_HEADER = Integer.MIN_VALUE / 2;
-    private final int VIEW_TYPE_FOOTER = VIEW_TYPE_HEADER - 1;
+    private int VIEW_TYPE_HEADER = Integer.MAX_VALUE / 2; //1073741823
+    private int VIEW_TYPE_FOOTER = VIEW_TYPE_HEADER - 1; //1073741822
 
     public PreWrapperAdapter(@NonNull RecyclerView.Adapter adapter, @NonNull PreViewCallback preView) {
         this.mInnerAdapter = adapter;
         this.mPreView = preView;
+    }
+
+    /**
+     * 当HeaderView更换的时候 需要刷新VIEW_TYPE_HEADER 否则不会重新调用onCreateViewHolder
+     */
+    public void refreshHeaderType() {
+        VIEW_TYPE_HEADER++;
+    }
+
+
+    /**
+     * 当FooterView更换的时候 需要刷新VIEW_TYPE_FOOTER 否则不会重新调用onCreateViewHolder
+     */
+    public void refreshFooterType() {
+        VIEW_TYPE_FOOTER--;
     }
 
     @NonNull
@@ -101,8 +116,22 @@ public class PreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
 
+    /**
+     * 通过实际位置或者内部位置
+     * @param position
+     * @return
+     */
     protected int getInnerPosition(int position) {
         return position - mPreView.getHeaderCount();
+    }
+
+    /**
+     * 通过内部位置获取实际位置
+     * @param innerPosition
+     * @return
+     */
+    protected int getWrapperPosition(int innerPosition) {
+        return innerPosition + mPreView.getHeaderCount();
     }
 
 

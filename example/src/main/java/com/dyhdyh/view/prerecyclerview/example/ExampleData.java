@@ -1,9 +1,9 @@
-package com.dyhdyh.widget.swiperefresh.example;
+package com.dyhdyh.view.prerecyclerview.example;
 
 
 import android.graphics.Color;
 
-import com.dyhdyh.widget.swiperefresh.example.adapter.ExampleModel;
+import com.dyhdyh.view.prerecyclerview.example.adapter.ExampleModel;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,5 @@
-package com.dyhdyh.widget.swiperefresh.example.adapter;
+package com.dyhdyh.view.prerecyclerview.example.adapter;
+
 
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -8,10 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dyhdyh.widget.swiperefresh.example.R;
+import com.dyhdyh.view.prerecyclerview.example.R;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * author  dengyuhan
@@ -20,7 +20,6 @@ import java.util.Random;
 public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.Holder> {
     private List<ExampleModel> data;
     private boolean staggeredGrid;
-    private Random colorRandom = new Random();
 
     public ExampleAdapter(List<ExampleModel> data) {
         this(data, false);

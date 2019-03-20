@@ -11,24 +11,24 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:onClick="clickLinearLayoutManager"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="clickLinearLayoutManager"
             android:text="Linear" />
 
         <Button
-            android:onClick="clickGridLayoutManager"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="clickGridLayoutManager"
             android:text="Grid" />
 
         <Button
-            android:onClick="clickStaggeredGridLayoutManager"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="clickStaggeredGridLayoutManager"
             android:text="StaggeredGrid" />
     </LinearLayout>
 
@@ -60,8 +60,15 @@
             android:text="模拟已经到底" />
     </RadioGroup>
 
-    <com.dyhdyh.view.prerecyclerview.PreRecyclerView
-        android:id="@+id/rv"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_Layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <com.dyhdyh.view.prerecyclerview.PreRecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 </LinearLayout>

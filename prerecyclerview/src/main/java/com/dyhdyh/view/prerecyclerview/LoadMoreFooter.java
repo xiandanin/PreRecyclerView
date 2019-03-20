@@ -1,5 +1,6 @@
 package com.dyhdyh.view.prerecyclerview;
 
+import android.support.annotation.IntRange;
 import android.view.View;
 
 public interface LoadMoreFooter {
@@ -21,7 +22,10 @@ public interface LoadMoreFooter {
      */
     int STATE_THE_END = 3;
 
-    void setState(int state);
+    void setState(@IntRange(from = LoadMoreFooter.STATE_NORMAL, to = LoadMoreFooter.STATE_THE_END) int state);
+
+    @IntRange(from = LoadMoreFooter.STATE_NORMAL, to = LoadMoreFooter.STATE_THE_END)
+    int getState();
 
     View getView();
 }

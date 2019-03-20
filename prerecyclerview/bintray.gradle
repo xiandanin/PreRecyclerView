@@ -1,0 +1,107 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.version.code
+        versionName rootProject.ext.version.name
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+
+// 生成jar包的task
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+// 生成javaDoc的jar
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+//设置编码格式，如果不设置可能会在gradlew install的时候出现GBK编码映射错误
+javadoc {
+    options {
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        author true
+        version true
+        links "http://docs.oracle.com/javase/8/docs/api"
+        linksOffline "http://d.android.com/reference","${android.sdkDirectory}/docs/reference"
+        failOnError = false
+    }
+}
+
+Properties localProperties = new Properties()
+localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+group = rootProject.ext.bintray.groupId
+version = rootProject.ext.version.name
+
+install {
+    repositories.mavenInstaller {
+        pom.version = rootProject.ext.version.name
+        pom.groupId = rootProject.ext.bintray.groupId
+        pom.artifactId = rootProject.ext.bintray.artifactId
+    }
+}
+
+bintray {
+    def envUser = System.getenv('BINTRAY_USER')
+    def envKey = System.getenv('BINTRAY_KEY')
+    def localUser = localProperties.getProperty("bintray.user")
+    def localKey = localProperties.getProperty("bintray.apikey")
+
+    def githubHost = "https://github.com/"
+    def repoName = "maven"
+    def siteUrl = githubHost + rootProject.ext.bintray.githubName
+    def issueUrl = githubHost + rootProject.ext.bintray.githubName + "/issues"
+    def gitUrl = githubHost + rootProject.ext.bintray.githubName + ".git"
+
+    user = localUser != null && !localUser.isEmpty() ? localUser : envUser
+    key = localKey != null && !localKey.isEmpty() ? localKey : envKey
+    configurations = ['archives']
+    pkg {
+        repo = repoName
+        name = rootProject.ext.bintray.name
+        userOrg = user
+        desc = rootProject.ext.bintray.desc
+        websiteUrl = siteUrl
+        issueTrackerUrl = issueUrl
+        vcsUrl = gitUrl
+        if (rootProject.ext.bintray.licenses != null && !rootProject.ext.bintray.licenses.isEmpty()) {
+            licenses = rootProject.ext.bintray.licenses
+        }
+        publicDownloadNumbers = true
+        githubRepo = rootProject.ext.bintray.githubName
+        if (rootProject.ext.bintray.githubReadme != null && !rootProject.ext.bintray.githubReadme.isEmpty()) {
+            githubReleaseNotesFile = rootProject.ext.bintray.githubReadme
+        }
+        publish = true
+        version {
+            name = rootProject.ext.version.name
+            desc = rootProject.ext.version.desc
+            released = new Date()
+            vcsTag = rootProject.ext.version.name
+        }
+    }
+}

@@ -1,32 +1,30 @@
 ext {
-    android =
+    android = //项目本地信息
             [
-                    versionCode      : 10,
-                    versionName      : "1.0.3.5",
+                    applicationId    : "com.dyhdyh.view.prerecyclerview.example",
 
+                    //sdk版本
                     compileSdkVersion: 28,
                     buildToolsVersion: "28.0.3",
                     minSdkVersion    : 14,
                     targetSdkVersion : 28,
                     supportVersion   : "28.0.0",
             ]
-
-    jcenter =
+    version = //版本信息
             [
-                    //项目名称
-                    name       : "SwipeRefreshView",
-                    groupId    : "com.dyhdyh.widget",
-                    //项目地址
-                    siteUrl    : "https://github.com/dengyuhan/SwipeRefreshView",
-                    //项目git地址
-                    gitUrl     : "https://github.com/dengyuhan/SwipeRefreshView.git",
-                    //项目描述
-                    description: "HeaderView、FooterView、刷新、加载更多，支持自定义组装的RecyclerView组件",
-                    //开发者的一些基本信息
-                    authorId   : "dengyuhan",
-                    authorName : "dengyuhan",
-                    authorEmail: "22309946@qq.com",
+                    code: 1, //版本号
+                    name: "1.0.0", //版本名称
+                    desc: "HeaderView、加载更多的RecyclerView", //版本描述
             ]
-
+    bintray = //项目上传信息
+            [
+                    name        : "PreRecyclerView", //项目名称，在bintray网站中的名称
+                    desc        : "HeaderView、加载更多的RecyclerView", //项目描述 可选
+                    groupId     : "com.dyhdyh.view",
+                    artifactId  : "prerecyclerview",
+                    githubName  : "dengyuhan/PreRecyclerView", //Github上的项目名称
+                    githubReadme: "README.md", //Github上的项目文档相对路径 可选
+                    licenses    : ['MIT'] //开源协议 可选
+            ]
 
 }

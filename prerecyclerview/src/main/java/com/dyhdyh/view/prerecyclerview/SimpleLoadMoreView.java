@@ -1,21 +1,20 @@
 package com.dyhdyh.view.prerecyclerview;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class SimpleLoadMoreView extends RelativeLayout implements LoadMoreFooter{
+public class SimpleLoadMoreView extends RelativeLayout implements LoadMoreFooter {
     private ProgressBar mProgressBar;
     private TextView mLabelTextView;
     private TextView mSymbolView;
+    private int mState;
 
     public SimpleLoadMoreView(Context context) {
         this(context, null);
@@ -32,14 +31,11 @@ public class SimpleLoadMoreView extends RelativeLayout implements LoadMoreFooter
         mLabelTextView = (TextView) findViewById(R.id.tv_loadmore_label);
         mSymbolView = (TextView) findViewById(R.id.tv_loadmore_symbol);
         final Drawable drawable = mSymbolView.getBackground();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && drawable instanceof GradientDrawable) {
-            TypedValue typedValue = new TypedValue();
-            context.getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.colorAccent, typedValue, true);
-            int[] attribute = new int[]{android.support.v7.appcompat.R.attr.colorAccent};
-            TypedArray array = context.obtainStyledAttributes(typedValue.resourceId, attribute);
-            //((GradientDrawable) drawable).setStroke(getResources().getDimensionPixelSize(R.dimen.stroke_width_error_icon), array.getColor(0, Color.DKGRAY));
-            array.recycle();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            mLabelTextView.setTextColor(ResourcesCompat.getColor(getResources(), android.R.color.darker_gray, null));
+            mSymbolView.setTextColor(ResourcesCompat.getColor(getResources(), android.R.color.darker_gray, null));
         }
+        setState(LoadMoreFooter.STATE_NORMAL);
         buildViewStyle(mProgressBar, mLabelTextView, mSymbolView);
     }
 
@@ -53,10 +49,11 @@ public class SimpleLoadMoreView extends RelativeLayout implements LoadMoreFooter
 
     @Override
     public void setState(int state) {
+        mState = state;
         if (LoadMoreFooter.STATE_NORMAL == state) {
-            setVisibility(View.GONE);
+            super.setVisibility(View.GONE);
         } else {
-            setVisibility(View.VISIBLE);
+            super.setVisibility(View.VISIBLE);
             if (LoadMoreFooter.STATE_LOADING == state) {
                 mProgressBar.setVisibility(View.VISIBLE);
                 mSymbolView.setVisibility(View.GONE);
@@ -71,6 +68,11 @@ public class SimpleLoadMoreView extends RelativeLayout implements LoadMoreFooter
                 mLabelTextView.setText(R.string.pre_label_footer_error);
             }
         }
+    }
+
+    @Override
+    public int getState() {
+        return mState;
     }
 
     @Override

@@ -1,12 +1,11 @@
-package com.dyhdyh.widget.swiperefresh.example;
+package com.dyhdyh.view.prerecyclerview.example;
 
 
 import android.os.AsyncTask;
 
-import com.dyhdyh.widget.swiperefresh.example.adapter.ExampleModel;
+import com.dyhdyh.view.prerecyclerview.example.adapter.ExampleModel;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * 模拟 请求获取数据
@@ -18,7 +17,7 @@ public class ExampleAsyncTask extends AsyncTask<Integer, Void, List<ExampleModel
     @Override
     protected List<ExampleModel> doInBackground(Integer... params) {
         try {
-            Thread.sleep(new Random().nextInt(2000) + 1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
