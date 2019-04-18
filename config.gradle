@@ -12,8 +12,8 @@ ext {
             ]
     version = //版本信息
             [
-                    code: 1, //版本号
-                    name: "1.0.0", //版本名称
+                    code: 2, //版本号
+                    name: "1.0.1", //版本名称
                     desc: "HeaderView、加载更多的RecyclerView", //版本描述
             ]
     bintray = //项目上传信息

@@ -60,11 +60,9 @@ public class PreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_HEADER) {
-            return new RecyclerView.ViewHolder(mPreView.getHeaderView()) {
-            };
+            return new HeaderViewHolder(mPreView.getHeaderView());
         } else if (viewType == VIEW_TYPE_FOOTER) {
-            return new RecyclerView.ViewHolder(mPreView.getFooterView()) {
-            };
+            return new HeaderViewHolder(mPreView.getFooterView());
         } else {
             return mInnerAdapter.onCreateViewHolder(parent, viewType);
         }
@@ -72,14 +70,14 @@ public class PreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List<Object> payloads) {
-        if (isInner(position)) {
+        if (isInner(position) && isInnerHolder(holder)) {
             mInnerAdapter.onBindViewHolder(holder, getInnerPosition(position), payloads);
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (isInner(position)) {
+        if (isInner(position) && isInnerHolder(holder)) {
             mInnerAdapter.onBindViewHolder(holder, getInnerPosition(position));
         }
     }
@@ -115,9 +113,14 @@ public class PreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return !isHeader(position) && !isFooter(position);
     }
 
+    protected boolean isInnerHolder(@NonNull RecyclerView.ViewHolder holder) {
+        return !(holder instanceof HeaderViewHolder);
+    }
+
 
     /**
      * 通过实际位置或者内部位置
+     *
      * @param position
      * @return
      */
@@ -127,6 +130,7 @@ public class PreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     /**
      * 通过内部位置获取实际位置
+     *
      * @param innerPosition
      * @return
      */
@@ -164,7 +168,7 @@ public class PreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onViewAttachedToWindow(@NonNull final RecyclerView.ViewHolder holder) {
         final int layoutPosition = holder.getLayoutPosition();
-        if (isInner(layoutPosition)) {
+        if (isInnerHolder(holder)) {
             //如果有实现接口 就回调带内部position的方法
             if (mInnerAdapter instanceof PreInnerAdapter) {
                 ((PreInnerAdapter) mInnerAdapter).onViewAttachedToWindow(holder, getInnerPosition(layoutPosition));
@@ -185,7 +189,7 @@ public class PreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onViewDetachedFromWindow(@NonNull final RecyclerView.ViewHolder holder) {
         final int layoutPosition = holder.getLayoutPosition();
-        if (isInner(layoutPosition)) {
+        if (isInnerHolder(holder)) {
             //如果有实现接口 就回调带内部position的方法
             if (mInnerAdapter instanceof PreInnerAdapter) {
                 ((PreInnerAdapter) mInnerAdapter).onViewDetachedFromWindow(holder, getInnerPosition(layoutPosition));
@@ -200,7 +204,7 @@ public class PreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onViewRecycled(RecyclerView.ViewHolder holder) {
         final int layoutPosition = holder.getLayoutPosition();
-        if (isInner(layoutPosition)) {
+        if (isInnerHolder(holder)) {
             //如果有实现接口 就回调带内部position的方法
             if (mInnerAdapter instanceof PreInnerAdapter) {
                 ((PreInnerAdapter) mInnerAdapter).onViewRecycled(holder, getInnerPosition(layoutPosition));
@@ -215,7 +219,7 @@ public class PreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public boolean onFailedToRecycleView(@NonNull RecyclerView.ViewHolder holder) {
         final int layoutPosition = holder.getLayoutPosition();
-        if (isInner(layoutPosition)) {
+        if (isInnerHolder(holder)) {
             //如果有实现接口 就回调带内部position的方法
             if (mInnerAdapter instanceof PreInnerAdapter) {
                 return ((PreInnerAdapter) mInnerAdapter).onFailedToRecycleView(holder, getInnerPosition(layoutPosition));
