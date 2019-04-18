@@ -1,6 +1,6 @@
 ### Gradle
 ```
-implementation 'com.dyhdyh.view:prerecyclerview:1.0.0'
+implementation 'com.dyhdyh.view:prerecyclerview:1.0.1'
 ```
 
 ### XML
