@@ -28,6 +28,7 @@ public class PreRecyclerView extends RecyclerView implements OnItemCountChangedL
     private LoadMoreFooter mFooterView;
     private OnLoadMoreListener mOnLoadMoreListener;
     private OnItemCountChangedListener mOnItemCountChangedListener;
+    private OnInterceptLoadMoreListener mOnInterceptListener;
 
     //是否开启加载更多
     private boolean mLoadMoreEnabled = true;
@@ -138,17 +139,20 @@ public class PreRecyclerView extends RecyclerView implements OnItemCountChangedL
         super.onScrollStateChanged(state);
         //如果加载更多是开启的/处于空闲状态/数据没有到底/也有监听 就检查是否可以加载更多
         if (mLoadMoreEnabled && mLoadMoreCompleted && !mLoadMoreEnd && mOnLoadMoreListener != null) {
-            LayoutManager lm = super.getLayoutManager();
-            if (lm != null && state == RecyclerView.SCROLL_STATE_IDLE) {
-                int lastVisibleItemPosition = findLastVisibleItemPosition(lm);
-                int itemCount = lm.getItemCount();
+            //如果拦截事件也通过 就加载更多
+            if (mOnInterceptListener == null || !mOnInterceptListener.onInterceptLoadMore()) {
+                LayoutManager lm = super.getLayoutManager();
+                if (lm != null && state == RecyclerView.SCROLL_STATE_IDLE) {
+                    int lastVisibleItemPosition = findLastVisibleItemPosition(lm);
+                    int itemCount = lm.getItemCount();
 
-                //如果最后显示的位置符合 加载更多也处于空闲 就回调加载更多
-                final int footerCount = mPreViewCallback.getFooterCount();
-                if (itemCount > 0 && lastVisibleItemPosition >= itemCount - footerCount - mAutoLoadByLastCount) {
-                    this.mLoadMoreCompleted = false;
-                    this.setLoadMoreState(LoadMoreFooter.STATE_LOADING);
-                    this.mOnLoadMoreListener.onLoadMore();
+                    //如果最后显示的位置符合 加载更多也处于空闲 就回调加载更多
+                    final int footerCount = mPreViewCallback.getFooterCount();
+                    if (itemCount > 0 && lastVisibleItemPosition >= itemCount - footerCount - mAutoLoadByLastCount) {
+                        this.mLoadMoreCompleted = false;
+                        this.setLoadMoreState(LoadMoreFooter.STATE_LOADING);
+                        this.mOnLoadMoreListener.onLoadMore();
+                    }
                 }
             }
         }
@@ -189,6 +193,10 @@ public class PreRecyclerView extends RecyclerView implements OnItemCountChangedL
         this.mAutoLoadByLastCount = autoLoadByLastCount;
     }
 
+    public void setLoadMoreEnabled(boolean enabled) {
+        this.mLoadMoreEnabled = enabled;
+    }
+
     public void setLoadMoreCompleted() {
         this.mLoadMoreCompleted = true;
     }
@@ -226,6 +234,10 @@ public class PreRecyclerView extends RecyclerView implements OnItemCountChangedL
 
     public void setOnItemCountChangedListener(OnItemCountChangedListener listener) {
         this.mOnItemCountChangedListener = listener;
+    }
+
+    public void setOnInterceptLoadMoreListener(OnInterceptLoadMoreListener listener) {
+        this.mOnInterceptListener = listener;
     }
 
     /**
