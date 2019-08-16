@@ -1,6 +1,6 @@
 ### Gradle
 ```
-implementation 'com.dyhdyh.view:prerecyclerview:1.0.1'
+implementation 'com.dyhdyh.view:prerecyclerview:1.0.2'
 ```
 
 ### XML
@@ -47,6 +47,9 @@ recyclerview.setLoadMoreFooter(footerView);
 //STATE_ERROR = 异常
 //STATE_THE_END = 到底了
 recyclerview.setLoadMoreState(LoadMoreFooter.STATE_LOADING);
+
+//还需要调用加载完成
+recyclerview.setLoadMoreCompleted();
 ```
 
 ### 设置回调
